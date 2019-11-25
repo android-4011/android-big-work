@@ -6,17 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <com.haibin.calendarview.CalendarLayout
         android:id="@+id/calendarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#fff"
-        app:only_week_view="false"
         app:default_status="shrink"
         app:calendar_content_view_id="@+id/recyclerView">
-
         <com.haibin.calendarview.CalendarView
+
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,12 +45,11 @@
             app:month_view_show_mode="mode_only_current"
             app:year_view_scheme_color="#f17706"/>
 
-        <com.haibin.calendarviewproject.group.GroupRecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/content_background" />
-
+            android:layout_width="381dp"
+            android:layout_height="370dp"
+            android:background="#ffffff" />
     </com.haibin.calendarview.CalendarLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
