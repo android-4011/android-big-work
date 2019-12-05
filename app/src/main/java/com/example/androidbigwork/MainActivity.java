@@ -8,7 +8,9 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.MonthView;
@@ -22,5 +24,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        Button button2=(Button)findViewById(R.id.button2);
+        Button button3=(Button)findViewById(R.id.button3);
+        Button button4=(Button)findViewById(R.id.button4);
+        button2.setOnClickListener( (View.OnClickListener) new button2_Click());
+        button3.setOnClickListener( (View.OnClickListener) new button3_Click());
+        button4.setOnClickListener( (View.OnClickListener) new button4_Click());
+    }
+
+    private class button2_Click implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+
+    private class button3_Click {
+    }
+
+    private class button4_Click {
     }
 }
