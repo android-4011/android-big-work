@@ -35,13 +35,22 @@ public class MainActivity extends AppCompatActivity {
     private class button2_Click implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-
+            Toast.makeText(MainActivity.this,"当前已在月视图",Toast.LENGTH_SHORT).show();
         }
     }
 
-    private class button3_Click {
+    private class button3_Click implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent i=new Intent(MainActivity.this,Main2Activity.class);
+            startActivity(i);
+        }
     }
 
-    private class button4_Click {
+    private class button4_Click implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+
+        }
     }
 }
