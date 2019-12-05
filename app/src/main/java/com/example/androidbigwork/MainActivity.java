@@ -9,18 +9,39 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.haibin.calendarview.Calendar;
+import com.haibin.calendarview.CalendarView;
 import com.haibin.calendarview.MonthView;
 /**
  * 首先继承月视图，假如我们想实现高仿魅族的日历
  */
 public class MainActivity extends AppCompatActivity {
 
+    CalendarView calendarView;
+    TextView textView2;
+    TextView textView1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        textView2=findViewById(R.id.textView2);
+        textView1=findViewById(R.id.textView);
+        calendarView=findViewById(R.id.calendarView);
+        calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+            @Override
+            public void onMonthChange(int year, int month) {
+                textView2.setText(month);
+            }
+        });
+        calendarView.setOnYearChangeListener(new CalendarView.OnYearChangeListener() {
+            @Override
+            public void onYearChange(int year) {
+                textView1.setText(year);
+            }
+        });
     }
 }
