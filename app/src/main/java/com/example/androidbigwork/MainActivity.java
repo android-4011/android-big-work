@@ -11,14 +11,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.haibin.calendarview.Calendar;
+import com.haibin.calendarview.CalendarView;
 import com.haibin.calendarview.MonthView;
 /**
  * 首先继承月视图，假如我们想实现高仿魅族的日历
  */
 public class MainActivity extends AppCompatActivity {
 
+    CalendarView calendarView;
+    TextView textView2;
+    TextView textView1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +35,21 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener( (View.OnClickListener) new button2_Click());
         button3.setOnClickListener( (View.OnClickListener) new button3_Click());
         button4.setOnClickListener( (View.OnClickListener) new button4_Click());
+        textView2=findViewById(R.id.textView2);
+        textView1=findViewById(R.id.textView);
+        calendarView=findViewById(R.id.calendarView);
+        calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+            @Override
+            public void onMonthChange(int year, int month) {
+                textView2.setText(month);
+            }
+        });
+        calendarView.setOnYearChangeListener(new CalendarView.OnYearChangeListener() {
+            @Override
+            public void onYearChange(int year) {
+                textView1.setText(year);
+            }
+        });
     }
 
     private class button2_Click implements View.OnClickListener{
