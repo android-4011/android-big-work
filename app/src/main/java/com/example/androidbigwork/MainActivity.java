@@ -28,19 +28,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        textView2=findViewById(R.id.textView2);
-        textView1=findViewById(R.id.textView);
+        textView2=findViewById(R.id.textView);
+        textView1=findViewById(R.id.textView2);
+
         calendarView=findViewById(R.id.calendarView);
+        textView2.setText(String.valueOf(calendarView.getCurMonth()));
+        textView1.setText(String.valueOf(calendarView.getCurYear()));
         calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChange(int year, int month) {
-                textView2.setText(month);
+                textView2.setText(String.valueOf(month));
             }
         });
         calendarView.setOnYearChangeListener(new CalendarView.OnYearChangeListener() {
             @Override
             public void onYearChange(int year) {
-                textView1.setText(year);
+                textView1.setText(String.valueOf(year));
             }
         });
     }
