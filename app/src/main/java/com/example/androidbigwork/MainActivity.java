@@ -14,9 +14,7 @@ import android.widget.Toast;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarView;
 import com.haibin.calendarview.MonthView;
-/**
- * 首先继承月视图，假如我们想实现高仿魅族的日历
- */
+
 public class MainActivity extends AppCompatActivity {
 
     CalendarView calendarView;
