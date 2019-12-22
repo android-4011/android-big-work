@@ -29,4 +29,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.haibin:calendarview:3.6.7'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+
 }
