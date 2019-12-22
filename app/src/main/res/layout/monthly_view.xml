@@ -3,6 +3,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <com.haibin.calendarview.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="0dp"
@@ -13,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.002"
+        app:layout_constraintVertical_bias="0.0"
         app:max_year="2020"
         app:min_year="2004"
         app:month_view="com.example.androidbigwork.MeiZuMonthView"
