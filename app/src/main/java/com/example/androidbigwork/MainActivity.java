@@ -143,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
             button2.setTextColor(Color.parseColor("#88000000"));
             button3.setTextColor(Color.parseColor("#88000000"));
             viewPager.setCurrentItem(0,false);
-
             Toast.makeText(MainActivity.this,"月视图",Toast.LENGTH_SHORT).show();
         }
     }
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             button2.setTextColor(Color.parseColor("#00BCD4"));
             button3.setTextColor(Color.parseColor("#88000000"));
             viewPager.setCurrentItem(1,false);
-
+            Toast.makeText(MainActivity.this,"周视图",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -170,3 +169,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
