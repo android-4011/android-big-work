@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -29,8 +30,23 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarView;
 import com.haibin.calendarview.MonthView;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,9 +67,13 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout add_agenda;
     TextView textView_agenda;
     SharedPreferences settings;
+    Button btn_startspeech;
+    private static final String TAG = MainActivity.class .getSimpleName();
+    private HashMap<String, String> mIatResults = new LinkedHashMap<String , String>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initSpeech();
         textView1=findViewById(R.id.textView1);
         textView2=findViewById(R.id.textView2);
 
@@ -138,6 +158,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
                 add_agenda=(ConstraintLayout)getLayoutInflater().inflate(R.layout.add_agenda,null);
+                btn_startspeech = add_agenda.findViewById(R.id.btn_startspeech );
+                editText1=add_agenda.findViewById(R.id.editText1);
+                btn_startspeech.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startSpeechDialog();
+                    }
+                });
                 dialog.setTitle("新建日程");
                 dialog.setMessage("请输入备注和日期");
                 dialog.setView(add_agenda);
@@ -241,7 +269,136 @@ public class MainActivity extends AppCompatActivity {
            dialog.dismiss();
         }
     }
+    private void initSpeech() {
+        // 将“12345678”替换成您申请的 APPID，申请地址： http://www.xfyun.cn
+        // 请勿在 “ =”与 appid 之间添加任务空字符或者转义符
+        SpeechUtility. createUtility( this, SpeechConstant. APPID + "=5e0217ca" );
+    }
+    private void startSpeechDialog() {
+        //1. 创建RecognizerDialog对象
+        RecognizerDialog mDialog = new RecognizerDialog(this, new MyInitListener()) ;
+        //2. 设置accent、 language等参数
+        mDialog.setParameter(SpeechConstant. LANGUAGE, "zh_cn" );// 设置中文
+        mDialog.setParameter(SpeechConstant. ACCENT, "mandarin" );
+        // 若要将UI控件用于语义理解，必须添加以下参数设置，设置之后 onResult回调返回将是语义理解
+        // 结果
+        // mDialog.setParameter("asr_sch", "1");
+        // mDialog.setParameter("nlp_version", "2.0");
+        //3.设置回调接口
+        mDialog.setListener( new MyRecognizerDialogListener()) ;
+        //4. 显示dialog，接收语音输入
+        mDialog.show() ;
+    }
 
+    class MyRecognizerDialogListener implements RecognizerDialogListener {
+
+        /**
+         * @param results
+         * @param isLast  是否说完了
+         */
+        @Override
+        public void onResult(RecognizerResult results, boolean isLast) {
+            String result = results.getResultString(); //为解析的
+            showTip(result) ;
+            System. out.println(" 没有解析的 :" + result);
+
+            String text = JsonParser.parseIatResult(result) ;//解析过后的
+            System. out.println(" 解析后的 :" + text);
+
+            String sn = null;
+            // 读取json结果中的 sn字段
+            try {
+                JSONObject resultJson = new JSONObject(results.getResultString()) ;
+                sn = resultJson.optString("sn" );
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            mIatResults .put(sn, text) ;//没有得到一句，添加到
+
+            StringBuffer resultBuffer = new StringBuffer();
+            for (String key : mIatResults.keySet()) {
+                resultBuffer.append(mIatResults .get(key));
+            }
+
+            editText1.setText(resultBuffer.toString());// 设置输入框的文本
+            editText1.setSelection(editText1.length()) ;//把光标定位末尾
+        }
+
+        @Override
+        public void onError(SpeechError speechError) {
+
+        }
+    }
+
+    class MyInitListener implements InitListener {
+
+        @Override
+        public void onInit(int code) {
+            if (code != ErrorCode.SUCCESS) {
+                showTip("初始化失败 ");
+            }
+
+        }
+    }
+
+    /**
+     * 语音识别
+     */
+    private void startSpeech() {
+        //1. 创建SpeechRecognizer对象，第二个参数： 本地识别时传 InitListener
+        SpeechRecognizer mIat = SpeechRecognizer.createRecognizer( this, null); //语音识别器
+        //2. 设置听写参数，详见《 MSC Reference Manual》 SpeechConstant类
+        mIat.setParameter(SpeechConstant. DOMAIN, "iat" );// 短信和日常用语： iat (默认)
+        mIat.setParameter(SpeechConstant. LANGUAGE, "zh_cn" );// 设置中文
+        mIat.setParameter(SpeechConstant. ACCENT, "mandarin" );// 设置普通话
+        //3. 开始听写
+        mIat.startListening( mRecoListener);
+    }
+
+
+    // 听写监听器
+    private RecognizerListener mRecoListener = new RecognizerListener() {
+        // 听写结果回调接口 (返回Json 格式结果，用户可参见附录 13.1)；
+//一般情况下会通过onResults接口多次返回结果，完整的识别内容是多次结果的累加；
+//关于解析Json的代码可参见 Demo中JsonParser 类；
+//isLast等于true 时会话结束。
+        public void onResult(RecognizerResult results, boolean isLast) {
+            Log.e (TAG, results.getResultString());
+            System.out.println(results.getResultString()) ;
+            showTip(results.getResultString()) ;
+        }
+
+        // 会话发生错误回调接口
+        public void onError(SpeechError error) {
+            showTip(error.getPlainDescription(true)) ;
+            // 获取错误码描述
+            Log. e(TAG, "error.getPlainDescription(true)==" + error.getPlainDescription(true ));
+        }
+
+        // 开始录音
+        public void onBeginOfSpeech() {
+            showTip(" 开始录音 ");
+        }
+
+        //volume 音量值0~30， data音频数据
+        public void onVolumeChanged(int volume, byte[] data) {
+            showTip(" 声音改变了 ");
+        }
+
+        // 结束录音
+        public void onEndOfSpeech() {
+            showTip(" 结束录音 ");
+        }
+
+        // 扩展用接口
+        public void onEvent(int eventType, int arg1 , int arg2, Bundle obj) {
+        }
+    };
+
+    private void showTip (String data) {
+        Toast.makeText( this, data, Toast.LENGTH_SHORT).show() ;
+    }
 }
 
 
