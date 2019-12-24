@@ -10,6 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton floatbutton2;
     Calendar calendar1;
     EditText editText1;
-    EditText editText2;
+    //EditText editText2;
+    EditText editText_yeat,editText_month,editText_day;
     ConstraintLayout add_agenda;
     TextView textView_agenda;
     SharedPreferences settings;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -64,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
         button3.setOnClickListener((View.OnClickListener) new button3_Click());//日视图
         floatbutton1=findViewById(R.id.floatingActionButton1);
         floatbutton2=findViewById(R.id.floatingActionButton2);
+        editText_yeat=findViewById(R.id.editText_year);
+        editText_month=findViewById(R.id.editText_month);
+        editText_day=findViewById(R.id.editText_day);
+
 
         textView_agenda=findViewById(R.id.textView_agenda);
         textView_agenda.setText("测试textview是否有问题");
@@ -210,10 +216,10 @@ public class MainActivity extends AppCompatActivity {
             //if(editText2.getText().toString().matches(regex))
             //{
                 editText1=add_agenda.findViewById(R.id.editText1);
-                editText2=add_agenda.findViewById(R.id.editText2);
+                //editText2=add_agenda.findViewById(R.id.editText2);
                 settings=getSharedPreferences("database", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor=settings.edit();
-                editor.putString(editText2.getText().toString(),editText1.getText().toString());
+               // editor.putString(editText2.getText().toString(),editText1.getText().toString());
                 editor.commit();
                 dialog.dismiss();
             //}
@@ -235,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
            dialog.dismiss();
         }
     }
+
 }
 
 

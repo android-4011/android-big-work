@@ -6,19 +6,51 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="40dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
-        android:autoText="true"
+        android:text="日"
+        android:textColor="@android:color/black"
+        android:textColorLink="@android:color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText1" />
+
+    <EditText
+        android:id="@+id/editText_day"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="日期"
+        android:hint="27"
         android:inputType="textPersonName"
         android:textColorHint="@color/text_notSelected_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/editText1" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="月"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/editText_day"
+        app:layout_constraintTop_toBottomOf="@+id/editText1" />
+
+    <EditText
+        android:id="@+id/editText_month"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="12"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/text_notSelected_color"
+        app:layout_constraintEnd_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/editText1" />
 
     <ImageView
@@ -54,5 +86,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/describe" />
+
+    <EditText
+        android:id="@+id/editText_year"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="2019"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/text_notSelected_color"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/editText1" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="年"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/editText_month"
+        app:layout_constraintTop_toBottomOf="@+id/editText1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
