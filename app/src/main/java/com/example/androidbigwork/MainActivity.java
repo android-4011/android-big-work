@@ -3,16 +3,23 @@ package com.example.androidbigwork;
 
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,12 +43,18 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton floatbutton1;
     FloatingActionButton floatbutton2;
     Calendar calendar1;
-    @Override
+    EditText editText1;
+    EditText editText2;
+    ConstraintLayout add_agenda;
+    TextView textView_agenda;
+    SharedPreferences settings;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView1=findViewById(R.id.textView1);
         textView2=findViewById(R.id.textView2);
+
 
         button1=findViewById(R.id.button1);
         button2=findViewById(R.id.button2);
@@ -52,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         floatbutton1=findViewById(R.id.floatingActionButton1);
         floatbutton2=findViewById(R.id.floatingActionButton2);
 
+        textView_agenda=findViewById(R.id.textView_agenda);
+        textView_agenda.setText("测试textview是否有问题");
         viewPager=findViewById(R.id.vp_main);
         list=new ArrayList<View>();
         LayoutInflater li=getLayoutInflater();
@@ -115,8 +130,15 @@ public class MainActivity extends AppCompatActivity {
         floatbutton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,Add_agenda_Activity.class);
-                startActivity(intent);
+                AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
+                add_agenda=(ConstraintLayout)getLayoutInflater().inflate(R.layout.add_agenda,null);
+                dialog.setTitle("新建日程");
+                dialog.setMessage("请输入备注和日期");
+                dialog.setView(add_agenda);
+                dialog.setPositiveButton("确定",new addClick());
+                dialog.setNegativeButton("取消",new cancleClick());
+                dialog.create();
+                dialog.show();
             }
         });
         calendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
@@ -129,6 +151,15 @@ public class MainActivity extends AppCompatActivity {
             public void onCalendarSelect(Calendar calendar, boolean isClick) {
                 calendarView1.scrollToCalendar(calendar.getYear(),calendar.getMonth(),calendar.getDay());
                 calendarView2.scrollToCalendar(calendar.getYear(),calendar.getMonth(),calendar.getDay());
+                SharedPreferences userSettings= getSharedPreferences("database", 0);
+                if(userSettings.contains(String.valueOf(calendar.getYear())+"年"+String.valueOf(calendar.getMonth())+"月"+String.valueOf(calendar.getDay())+"日"))
+                {
+                    textView_agenda.setText(userSettings.getString(String.valueOf(calendar.getYear())+ "年"+String.valueOf(calendar.getMonth())+"月"+String.valueOf(calendar.getDay())+"日","默认"));
+                }
+                else
+                {
+                    textView_agenda.setText("");
+                }
             }
         });
 
@@ -168,5 +199,43 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,"日视图",Toast.LENGTH_SHORT).show();
         }
     }
+
+    private class addClick implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
+
+
+           //String regex="\\d\\d\\d\\d年\\d\\d月\\d\\d日";
+            //if(editText2.getText().toString().matches(regex))
+            //{
+                editText1=add_agenda.findViewById(R.id.editText1);
+                editText2=add_agenda.findViewById(R.id.editText2);
+                settings=getSharedPreferences("database", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor=settings.edit();
+                editor.putString(editText2.getText().toString(),editText1.getText().toString());
+                editor.commit();
+                dialog.dismiss();
+            //}
+            /*else
+            {
+                editText2.setText("");
+                Toast.makeText(MainActivity.this,"请按照年月日格式输出",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }*/
+
+
+
+        }
+    }
+
+    private class cancleClick implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+           dialog.dismiss();
+        }
+    }
 }
+
+
 
